@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #app {
+      width: 60vw;
+      margin: 100px auto 0;
+    }
+
+    .missionBoard {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .game-start {
+      text-align: center;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .barrel {
+      height: 60px;
+      width: 100px;
+      background: #efefef;
+      border-left: 2px solid #ddd;
+      border-right: 2px solid #ddd;
+      background: linear-gradient(to bottom, #efefef 100%, #ccc 0%);
+    }
+
+    .barrel:before {
+      display: block;
+      content: '';
+      height: 30px;
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 50%;
+      transform: rotateX(40deg);
+      background-color: #efefef;
+      text-align: center;
+      line-height: 1.5em;
+      position: relative;
+      top: -15px;
+      left: -2px;
+    }
+
+    .barrel:after {
+      display: block;
+      content: "";
+      height: 30px;
+      width: 100%;
+      border: 2px solid #ddd;
+      border-top: 0px;
+      transform: rotateX(40deg);
+      background: linear-gradient(to bottom, rgba(239, 239, 239, 0) 40%, #efefef 50%);
+      border-radius: 50%;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+      position: relative;
+      top: 11px;
+      left: -2px;
+    }
+
+    .game-main {
+      position: relative;
+      width: 100%;
+      height: 400px;
+    }
+
+    .user-select-none {
+      -webkit-touch-callout: none;
+      -moz-user-select: none;
+      /*火狐*/
+      -webkit-user-select: none;
+      /*webkit浏览器*/
+      -ms-user-select: none;
+      /*IE10*/
+      -khtml-user-select: none;
+      /*早期浏览器*/
+      user-select: none;
+    }
+
+    .selectWordList {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="app">
+    <div class="">
+      <div class="selectWordList">
+        {{selectWordList}}
+      </div>
+      <div class="missionBoard">
+        <div class="barrel"></div>
+        <div>{{formatCountdown}}</div>
+      </div>
+
+      <div v-if="gameOver" @click="gameStart" class="game-start">Test</div>
+      <!-- 主体页面数据 -->
+      <div class="game-main"></div>
+
+    </div>
+  </div>
+</body>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      wordList: [],
+      countdown: 0,
+      gameOver: true,
+      startTime: 0,
+      second: 0,
+      countIndex: 1,
+      colorData: ["ff9a76", "679b9b", "fa7d09", "14b1ab", "184d47", "96bb7c", "eebb4d", "726a95", "b1b493",
+        "d92027"
+      ],
+      directionOptions: ["0deg", "90deg", "180deg", "270deg"],
+      selectWordList: [],
+      answer: [],
+      onMouseUpArr: [],
+      onMouseMoveArr: [],
+      initialX: 0,
+      initialY: 0,
+      isMouseDown: false,
+      target: null
+    },
+    created() {
+      this.initData();
+    },
+    methods: {
+      initData() {
+        // TODO: 赋值会有变动
+        this.wordList = ['art', 'car', 'bus', 'earth', 'camera', 'phone', 'sun', 'light', 'number', 'xsfew'];
+
+        // 5 分钟
+        this.countdown = 5 * 60;
+
+        gameOver = true;
+      },
+      keepTwo(number) {
+        return Math.round(number * 100) / 100;
+      },
+      startHourglass() {
+        setTimeout(--this.countdown ? this.startHourglass : this.stopGame, 1000);
+      },
+      stopGame() {
+        this.gameOver = true;
+        document.querySelector('.game-main').innerHTML = '';
+      },
+      // 倒计时，此处仅计时用，不执行游戏循环，减去的时间仅仅为执行setTimeout回调的几毫秒，没必要
+      hourglass(interval) {
+        setTimeout(() => {
+          const endTime = +new Date().getTime();
+
+          const deviation = endTime - (this.startTime + this.countIndex * 1000);
+
+          this.countIndex++;
+
+          this.second++;
+
+          if (this.second === 60) this.second = 0;
+
+          this.countdown--;
+
+          if (!this.countdown) {
+            this.gameOver = true;
+            document.querySelector('.game-main').innerHTML = "";
+            return;
+          }
+
+          this.hourglass(1000 - deviation);
+        }, interval);
+      },
+      // 游戏开始
+      gameStart() {
+        // 已弃用
+        // this.startTime = +new Date();
+        this.wordConstruct();
+        // 初始化完毕再更改游戏状态
+        this.gameOver = false;
+        this.countdown = 5 * 60;
+        // this.hourglass(1000);
+        this.startHourglass();
+      },
+      wordConstruct() {
+        const gameMain = document.querySelector('.game-main');
+        const barrel = document.querySelector('.barrel');
+        // TODO: 有待研究
+        const answerArea = {
+          heigth: {
+            start: -40,
+            end: 20
+          },
+          width: {
+            start: -50,
+            end: 30
+          }
+        };
+
+        // 渲染单词
+        this.wordList.forEach((text, index) => {
+          // const num = Math.random() * 35
+          // const fontSize = num > 14 ? Math.ceil(num) : Math.ceil(num + 14)
+          const fontSize = parseInt(Math.random() * 21 + 14);
+          const color = this.colorData[Math.floor(Math.random() * this.colorData.length)];
+          const direction = this.directionOptions[Math.floor(Math.random() * this.directionOptions.length)];
+          const top = Math.floor(Math.random() * gameMain.offsetHeight);
+          const left = Math.floor(Math.random() * gameMain.offsetWidth);
+          // 有可能超出边界，需要结合字体大小和方向进行计算
+          const word = document.createElement("div");
+          // let nowTop = 0;
+          // let nowLeft = 0;
+
+          word.style.position = "absolute";
+          word.style.cursor = "pointer";
+          word.style.top = `${top}px`;
+          word.style.left = `${left}px`;
+          word.style.fontSize = `${fontSize}px`;
+          word.style.transform = `rotate(${direction})`;
+          word.style.color = `#${color}`;
+          word.className = 'user-select-none momo' + index;
+          word.innerText = text;
+
+          // this.onMouseMoveArr.push(onMouseMove);
+          // this.onMouseUpArr.push(onMouseUp);
+
+          const onClickHandle = (e) => {
+            this.isMouseDown = true;
+            this.target = word;
+            this.initialX = e.pageX - word.offsetLeft;
+            this.initialY = e.pageY - word.offsetTop;
+
+            // 避免抬起事件多次绑定
+            // word.removeEventListener("mouseup", this.onMouseUpArr[index]);
+
+            // 绑定移动事件
+            // word.addEventListener("mousemove", this.onMouseMoveArr[index]);
+
+            // 鼠标抬起
+            // word.addEventListener("mouseup", this.onMouseUpArr[index]);
+
+            // 鼠标移出
+            // word.addEventListener("mouseout", () => {
+            //   word.removeEventListener("mousemove", this.onMouseMoveArr[index]);
+            // });
+          };
+
+          // 鼠标点击
+          word.addEventListener("mousedown", onClickHandle);
+
+          gameMain.appendChild(word);
+        });
+
+        const onMouseUp = (e) => {
+          this.isMouseDown = false;
+          if (!this.target) return;
+          let left = e.pageX - this.initialX;
+          let top = e.pageY - this.initialY;
+          console.log(e.pageX, this.initialX)
+          console.log(left, top)
+          if (answerArea.heigth.start <= top && answerArea.heigth.end >= top && answerArea.width
+            .start <= left && answerArea.width.end >= left) {
+            this.selectWordList.push(this.target.innerText);
+            console.log(this.selectWordList);
+            this.target.remove();
+          }
+          this.target = null;
+          // word.removeEventListener("mousemove", this.onMouseMoveArr[index]);
+        };
+
+        const onMouseMove = (e) => {
+          if (!this.isMouseDown || !this.target) return;
+          let left = e.pageX - this.initialX;
+          let top = e.pageY - this.initialY;
+
+          this.target.style.left = left + "px";
+          this.target.style.top = top + "px";
+        }
+
+        // 绑定移动事件
+        // word.addEventListener("mousemove", this.onMouseMoveArr[index]);
+        window.addEventListener('mousemove', onMouseMove);
+
+        // 鼠标抬起
+        // word.addEventListener("mouseup", this.onMouseUpArr[index]);
+        window.addEventListener('mouseup', onMouseUp);
+      }
+    },
+    computed: {
+      formatCountdown() {
+        // return `倒计时: ${Math.floor(this.countdown / 60)} : ${60 - this.second === 60 ? '00' : 60 - this.second}`;
+        return `倒计时: ${('0' + parseInt(this.countdown / 60)).slice(-2)} : ${('0' + this.countdown % 60).slice(-2)}`;
+      }
+    }
+  })
+</script>
+
+</html>
