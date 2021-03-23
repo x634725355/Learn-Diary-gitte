@@ -29,11 +29,14 @@ const timeHandle = (q,c,t) => {
     setTimeout(() => {
         while (true) {
             if (q()) { return c(); }
-            t = t * 1.5
+
+            t = t * 1.5;
+            
             timeHandle(q,c,t);
         }
     }, t)
 }
+
 
 const simplePoller = (queryFn, callback) => {
     let time = 1000;
