@@ -16,12 +16,11 @@
 
         if (collectArr.length !== 10 || !data.includes(";")) { return console.log('这个记录是无效的', data); }
 
-        let Leon = collectArr.slice(0, 5).map(p => ({ card: p[1], colours: p[0] }));
-        let Judy = collectArr.slice(5, 10).map(p => ({ card: p[1], colours: p[0] }));
+        let Leon = collectArr.slice(0, 5).map(p => ({ card: p.slice(1), colours: p[0] }));
+        let Judy = collectArr.slice(5, 10).map(p => ({ card: p.slice(1), colours: p[0] }));
 
         console.log('两位选手的牌', Leon, Judy);
 
-        
     }
 
     init(momo[0]);
