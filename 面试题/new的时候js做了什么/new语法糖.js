@@ -1,10 +1,11 @@
 
 // #### new的时候 js做了什么
 
-function person(name, age) {
-    let obj = Object.create({});
+function person(Con, ...args) {
+    let obj = Object.create(Con.prototype);
 
-    // obj.
+    let result = Con.call(obj, ...args);
 
+    return result instanceof Object ? result : obj;
 }
 
