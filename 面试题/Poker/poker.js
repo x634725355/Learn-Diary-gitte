@@ -37,5 +37,7 @@ init(momo[0]);
 
 // 找出两张牌
 function score(data) {
-
+    data.forEach(p => {
+        
+    })
 }
