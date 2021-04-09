@@ -15,12 +15,23 @@
         }, 500);
     }
 
+    function overwriteHistory() {
+        const newPushState = history.pushState;
+        const newReplaceState = history.replaceState;
+        const newGo = history.go;
+        const newBack = history.back;
+
+        
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         console.log('我被执行了!');
 
-        console.log('路由', window.location);
-
-        const $location = new Proxy(window.location, )
+        document.addEventListener('click', (e) => {
+            queueMicrotask(() => {
+                replaceMethod();
+            })
+        });
 
         replaceMethod();
 
