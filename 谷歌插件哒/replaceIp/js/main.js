@@ -21,7 +21,18 @@
         const newGo = history.go;
         const newBack = history.back;
 
-        
+        history.pushState = function (...args) {
+            newPushState.call(this, ...args);
+        }
+        history.replaceState = function (...args) {
+            newReplaceState.call(this, ...args);
+        }
+        history.go = function (...args) {
+            newGo.call(this, ...args);
+        }
+        history.back = function (...args) {
+            newBack.call(this, ...args);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
