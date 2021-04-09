@@ -14,6 +14,7 @@
             });
         }, 500);
     }
+    console.log(123);
 
     function overwriteHistory() {
         const newPushState = history.pushState;
