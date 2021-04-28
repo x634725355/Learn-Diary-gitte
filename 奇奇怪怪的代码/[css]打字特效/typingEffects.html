@@ -83,6 +83,7 @@
     momo.innerHTML = momo.textContent.replace(/\S/g, "<span>$&</span>").replace(/\s/g, "<span>&nsbp;</span>")
     
     let delay = 0;
+    // 延迟动画执行时间
     document.querySelectorAll('span').forEach((span, index) => {
         delay += 0.1;
         if (index === 6) delay += 0.3
