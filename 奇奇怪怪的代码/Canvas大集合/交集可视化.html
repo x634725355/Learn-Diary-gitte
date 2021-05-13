@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交集可视化</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .center {
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        canvas {
+            border: 1px solid pink;
+        }
+    </style>
+</head>
+
+<script>
+    function draw() {
+        function render(x) {
+            ctx.moveTo(x * 10, 100);
+            ctx.lineTo(x * 10, 90 - indent);
+            ctx.strokeText(x, x * 10 - 3, 85 - indent);
+        }
+
+        const canvas = document.querySelector("#momo");
+        const ctx = canvas.getContext('2d');
+        // 缩进比例
+        let indent = 0;
+
+        const arrData = [
+            [1, 4],
+            [7, 10],
+            [3, 5]
+        ];
+
+        const momo = arrData.flat(2);
+
+        ctx.beginPath();
+        ctx.moveTo(0, 100);
+        ctx.lineTo(300, 100);
+
+        arrData.forEach(nums => {
+
+            render(nums[0]);
+            render(nums[1]);
+
+            ctx.moveTo(nums[0] * 10, 90 - indent);
+            ctx.lineTo(nums[1] * 10, 90 - indent);
+
+            indent += 5;
+        })
+
+        ctx.stroke();
+    }
+
+</script>
+
+<body onload="draw();">
+    <div class="center">
+        <canvas width="800" height="300" id="momo"></canvas>
+    </div>
+</body>
+
+</html>
