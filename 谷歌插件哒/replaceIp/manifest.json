@@ -24,7 +24,7 @@
     "content_scripts": [
         {
             "matches": [
-                "http://110.185.169.13:90/*"
+                "http://118.122.250.104/*"
             ],
             "js": [
                 "js/main.js"
