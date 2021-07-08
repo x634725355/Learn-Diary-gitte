@@ -7,38 +7,71 @@
     <title>BatterScroll</title>
     <script src="https://unpkg.com/better-scroll@latest/dist/better-scroll.js"></script>
     <style>
-        .box {
-            width: 80vw;
-            height: 400px;
-            background-color: pink;
-            overflow: hidden;
-            position: relative;
-        }
+      .box {
+        width: 80vw;
+        height: 400px;
+        background-color: pink;
+        overflow: hidden;
+        position: relative;
+      }
 
-        .momo {
-            margin: 0px auto;
-            width: 80%;
-            height: 800px;
-            background-color: goldenrod;
-        }
+      .momo {
+        margin: 0px auto;
+        width: 80%;
+        height: 800px;
+        background-color: goldenrod;
+      }
+
+      .scroll {
+        border: 3px solid pink;
+        padding: 10px;
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        position: relative;
+        border-radius: 5px;
+      }
+
+      .horizental {
+        display: inline-block;
+      }
+
+      .horizental-item {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <div class="box" >
-        <div class="momo" >
-            <div>123123</div>
-            <span>123123123</span>
-        </div>
+    <div class="box">
+      <div class="momo">
+        <div>123123</div>
+        <span>123123123</span>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="horizental">
+        <span class="horizental-item" >qiwjdoqjwdoqidw</span>
+        <span class="horizental-item" >😶‍🌫️🤩🥳😶🤫</span>
+        <span class="horizental-item" >😟🤥🙄🤢😴</span>
+        <span class="horizental-item" >🤢😴🥱😶🤫</span>
+      </div>
     </div>
   </body>
   <script>
-      document.addEventListener('DOMContentLoaded', firstExperience);
+    document.addEventListener("DOMContentLoaded", firstExperience);
 
-      function firstExperience() {
-        if (!BetterScroll) return false;
-        const bs = BetterScroll.createBScroll(document.querySelector('.box'), {
-            probeType: 3
-        });
-      }
+    function firstExperience() {
+      if (!BetterScroll) return false;
+      const bs = BetterScroll.createBScroll(document.querySelector(".box"), {
+        probeType: 3,
+      });
+
+      const momo = BetterScroll.createBScroll(document.querySelector(".scroll", {
+        scrollX: true
+      }))
+    }
   </script>
 </html>
