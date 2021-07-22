@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>初体验 petite-vue</title>
+    <script src=""></script>
+</head>
+
+<body>
+    <!-- v-scope value cna be omitted -->
+    <div v-scope="App({ initialCount: 1 })" @mounted="mounted">
+        <p>{{ count }}</p>
+        <button @click="inc">➕➕➕➕➕</button>
+    </div>
+</body>
+<script type="module">
+    import { createApp } from "https://unpkg.com/petite-vue?module";
+
+    function App(props) {
+        return {
+            count: props.initialCount,
+            inc() {
+                this.count++;
+            },
+            mounted() {
+                console.log('Im mounted');
+            }
+        }
+    }
+
+    createApp({
+        App
+    }).mount();
+</script>
+
+</html>
