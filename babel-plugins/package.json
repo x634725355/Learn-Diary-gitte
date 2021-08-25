@@ -1,0 +1,27 @@
+{
+  "name": "babel-plugin-import-style",
+  "version": "1.0.0",
+  "description": "导入组件样式文件",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-typescript": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "@rollup/plugin-typescript": "^8.2.5",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-latest": "^6.24.1",
+    "rollup": "^2.56.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "build": "babel --config-file ./babel.config.js --out-dir dist ./src --extensions '.ts'"
+  }
+}
