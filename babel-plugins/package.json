@@ -1,9 +1,9 @@
 {
   "name": "babel-plugin-import-style",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "导入组件样式文件",
-  "main": "index.js",
   "license": "MIT",
+  "main": "src/import.js",
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
@@ -21,7 +21,14 @@
     "tslib": "^2.3.1",
     "typescript": "^4.3.5"
   },
+  "dependencies": {
+    "@babel/helper-module-imports": "^7.0.0"
+  },
   "scripts": {
     "build": "babel --config-file ./babel.config.js --out-dir dist ./src --extensions '.ts'"
-  }
+  },
+  "files": [
+    "src",
+    "package.json"
+  ]
 }
