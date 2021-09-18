@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>音频可视化</title>
+  </head>
+  <body>
+    <div>音频可视化</div>
+    <video id="video" controls src="./i am father.mp4"></video>
+    <audio src="./i am father.mp4" controls id="audio"></audio>
+  </body>
+  <script>
+    window.onload = () => {
+      demo();
+    };
+
+    function demo() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+      const ctx = new AudioContext();
+
+      // 分析器
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+
+      const audio = document.getElementById("audio");
+
+      const source = ctx.createMediaElementSource(audio);
+
+      // 将音频源关联到分析器
+      const aContext = source.connect(analyser);
+
+      // 将分析器关联到输出设备（耳机、扬声器）
+      analyser.connect(ctx.destination);
+
+      // audio.play();
+
+      const bufferLength = aContext.frequencyBinCount;
+      const dataArray = new Float32Array(bufferLength);
+
+      let audioData = aContext.getFloatFrequencyData(dataArray);
+
+      console.log("audio", audioData);
+    }
+
+    function momo() {
+      // let mediaStream = new MediaStream();
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+      const ctx = new AudioContext();
+
+      const analyser = ctx.createAnalyser();
+
+      analyser.fftSize = 512;
+
+      // 获取<audio>节点
+      const audio = document.getElementById("audio");
+
+      // 通过<audio>节点创建音频源
+      const source = ctx.createMediaElementSource(audio);
+
+      // 将音频源关联到分析器
+      source.connect(analyser);
+
+      // 将分析器关联到输出设备（耳机、扬声器）
+      analyser.connect(ctx.destination);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      analyser.getByteFrequencyData(dataArray);
+
+      console.log("音频文件", analyser.frequencyBinCount);
+    }
+  </script>
+</html>
