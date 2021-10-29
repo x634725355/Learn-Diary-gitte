@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      position: relative;
+    }
+    .box1 {
+      width: 100%;
+      height: 100%;
+      /* width: 200px;
+      height: 300px; */
+      /* padding: 10px; */
+      background-image: linear-gradient(to bottom, #a3cdfe, #979797, #756767);
+      position: absolute;
+      top: 0px;
+      left: 0px;
+
+      clip-path: path(
+        'M0 8 Q0 0 8 0 L192 0 Q200 0 200 8 L200 292 L196 292 L196 8 Q196 4 192 4 L8 4 Q4 4 4 8 L0 8 Z L0 292 Q0 300 8 300 L192 300 Q200 300 200 292 L196 292 Q196 296 192 296 L8 296 Q4 296 4 292 L4 8 L0 8 Z'
+        );
+    }
+
+    .box2 {
+      /* width: 200px;
+      height: 300px;
+      box-sizing: border-box;
+      border: 10px;
+      border-style: solid;
+      border-radius: 8px;
+      background-color: #ccc; */
+      /* width: 100%;
+      height: 100%;
+      background-color: pink; */
+      position: relative;
+      top: 10px;
+      left: 10px;
+    }
+
+    svg {
+      border: 1px solid pink;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="box1" ></div>
+    <div class="box2" >
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+    </div>
+  </div>
+
+  <svg width="200px" height="200px" >
+    <path d="M0 0 l 100 0 l 0 100 l -100 0 l 0 -100 Z" ></path>
+  </svg>
+
+
+
+  <label for="width">宽：</label>
+  <input type="text" id="input-width" name="width" value="200">
+  <label for="height">高：</label>
+  <input type="text" id="input-height" name="height" value="300">
+  <label for="borderWidth">边框宽度：</label>
+  <input type="text" id="input-border-width" name="borderWidth" value="4">
+  <button onclick="generate()">生成</button>
+  <textarea type="text" id="css" cols="30" rows="20"></textarea>
+
+  <script>
+    function generate() {
+      const w = document.getElementById('input-width').value;
+      const h = document.getElementById('input-height').value;
+      const bw = document.getElementById('input-border-width').value;
+      const obw = bw * 2;
+
+      console.log(w, h, bw)
+      const path = `
+        M0 ${obw}
+        Q0 0 ${obw} 0
+        L${w - obw} 0
+        Q${w} 0 ${w} ${obw}
+        L${w} ${h - obw}
+        L${w - bw} ${h - obw}
+        L${w - bw} ${obw}
+        Q${w - bw} ${bw} ${w - obw} ${bw}
+        L${obw} ${bw}
+        Q${bw} ${bw} ${bw} ${obw}
+        L0 ${obw}
+        Z
+        L0 ${h - obw}
+        Q0 ${h} ${obw} ${h}
+        L${w - obw} ${h}
+        Q${w} ${h} ${w} ${h - obw}
+        L${w - bw} ${h - obw}
+        Q${w - bw} ${h - bw} ${w - obw} ${h - bw}
+        L${obw} ${h - bw}
+        Q${bw} ${h - bw} ${bw} ${h - obw}
+        L${bw} ${obw}
+        L0 ${obw}
+        Z
+      `.replace(/\n +/g, ' ').trim();
+
+      document.getElementById('css').value = `clip-path: path('${path}');`;
+    }
+  </script>
+</body>
+</html>
