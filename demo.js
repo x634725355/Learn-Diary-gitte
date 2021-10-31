@@ -1,16 +1,22 @@
+const stepArray = new Array(10).fill(1).map((p, index) => {
+  if (index === 3 || index === 6) {
+    return { dance: true };
+  }
 
-/**
- * 
- * @param {String} momo 
- * @param {Array} kaka 
- */
-function momo(momo, kaka) {
-    return momo+kaka;
+  return { dance: false };
+});
+
+console.log("step", stepArray);
+
+const child = [];
+
+function main() {
+    if (child[child.length - 1] >= 10) {
+        return child;
+    }
+
+    
+    
 }
 
-
-let b = ['a','e','s','d','g','d','k','q','y','o','b','c'];
-
-let bDemo = b.sort();
-
-console.log("顺序", bDemo);
+console.log(main());
